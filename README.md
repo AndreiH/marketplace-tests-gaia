@@ -17,7 +17,7 @@ Installation
 
 Installation is simple:
 
-    git clone https://github.com/bebef1987/marketplace-tests-gaia.git
+    git clone https://github.com/mozilla/marketplace-tests-gaia.git
     cd marketplace-tests-gaia
     python setup.py develop
 
