@@ -28,7 +28,7 @@ class TestMarketplaceWithoutConnectivity(MarketplaceGaiaTestCase):
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         marketplace.launch()
 
-        self.marionette.switch_to_frame()
+        self.apps.switch_to_displayed_app()
 
         self.assertEqual(marketplace.error_title_text, self.expected_error_title)
         self.assertEqual(marketplace.error_message_text, self.expected_error_message)
