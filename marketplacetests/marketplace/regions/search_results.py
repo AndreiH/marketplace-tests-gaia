@@ -29,12 +29,17 @@ class SearchResults(Base):
 class Result(PageRegion):
 
     _name_locator = (By.CSS_SELECTOR, '.info > h3')
+    _new_popular_name_locator = (By.CSS_SELECTOR, '.info > h2')
     _author_locator = (By.CSS_SELECTOR, '.info .author')
     _install_button_locator = (By.CSS_SELECTOR, '.button.product.install')
 
     @property
     def name(self):
         return self.root_element.find_element(*self._name_locator).text
+
+    @property
+    def new_popular_name(self):
+        return self.root_element.find_element(*self._new_popular_name_locator).text
 
     @property
     def author(self):

@@ -14,14 +14,14 @@ class Marketplace(Base):
 
     _marketplace_frame_locator = (By.CSS_SELECTOR, 'iframe[src*="marketplace"]')
 
-    _gallery_apps_locator = (By.CSS_SELECTOR, '#gallery .app')
-    _loading_fragment_locator = (By.CSS_SELECTOR, 'div.loading-fragment')
+    _gallery_apps_locator = (By.CSS_SELECTOR, '.app.mini-app')
+    _loading_fragment_locator = (By.CSS_SELECTOR, '.loading')
     _offline_message_locator = (By.CSS_SELECTOR, 'div.offline-message')
     _settings_button_locator = (By.CSS_SELECTOR, '.mobile .header-button.settings')
     _home_button_locator = (By.CSS_SELECTOR, 'h1.site a')
     _back_button_locator = (By.ID, 'nav-back')
     _notification_locator = (By.ID, 'notification-content')
-    _popular_apps_tab_locator = (By.CSS_SELECTOR, '#gallery .tabs a:nth-child(1)')
+    _popular_apps_tab_locator = (By.CSS_SELECTOR, '.popular a')
 
     # Marketplace settings tabs
     _account_tab_locator = (By.CSS_SELECTOR, 'a[href="/settings"]')
@@ -126,7 +126,7 @@ class Marketplace(Base):
 
     def show_popular_apps(self):
         self.marionette.find_element(*self._popular_apps_tab_locator).tap()
-        self.wait_for_condition(lambda m: 'active' in m.find_element(*self._popular_apps_tab_locator).get_attribute('class'))
+        self.wait_for_element_not_displayed(*self._loading_fragment_locator)
 
     def tap_settings(self):
         self.wait_for_element_displayed(*self._settings_button_locator)

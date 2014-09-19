@@ -24,7 +24,7 @@ class TestSearchMarketplaceAndInstallApp(MarketplaceGaiaTestCase):
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         marketplace.launch()
 
-        self.app_name = marketplace.popular_apps[0].name
+        self.app_name = marketplace.popular_apps[0].new_popular_name
         app_author = marketplace.popular_apps[0].author
         results = marketplace.search(self.app_name)
 
