@@ -26,7 +26,7 @@ class MarketplaceGaiaTestCase(GaiaTestCase):
                 profile_folder = file_name
                 break
         for file_name in os.listdir(certs_folder):
-            self.device.push_file(os.path.join(certs_folder, file_name),
+            self.device.file_manager.push_file(os.path.join(certs_folder, file_name),
                                   destination='data/b2g/mozilla/%s/%s' % (profile_folder, file_name))
         self.data_layer.set_char_pref('dom.mozApps.signed_apps_installable_from',
                                       'https://marketplace-dev.allizom.org,https://marketplace.firefox.com')
