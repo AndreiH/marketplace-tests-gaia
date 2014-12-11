@@ -9,7 +9,7 @@ except (OSError, IOError):
     description = ''
 
 # dependencies
-deps = ['gaiatest']
+deps = ['gaiatest-v2.0']
 
 setup(name='marketplacetests',
       version='1.0',
