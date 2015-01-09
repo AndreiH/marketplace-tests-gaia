@@ -9,7 +9,7 @@ from marketplacetests.marketplace_gaia_test import MarketplaceGaiaTestCase
 from marketplacetests.marketplace.app import Marketplace
 
 
-class TestMarketplaceLoginDuringPurchase(MarketplaceGaiaTestCase):
+class TestMarketplaceEnterIncorrectPin(MarketplaceGaiaTestCase):
 
     def test_enter_incorrect_pin(self):
 
