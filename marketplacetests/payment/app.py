@@ -37,6 +37,12 @@ class Payment(Base):
         payment_iframe = self.marionette.find_element(*self._payment_frame_locator)
         self.marionette.switch_to_frame(payment_iframe)
 
+    def wait_for_throbber_not_displayed(self):
+        self.marionette.switch_to_frame()
+        self.wait_for_element_displayed(*self._loading_throbber_locator)
+        self.wait_for_element_not_displayed(*self._loading_throbber_locator)
+        self.switch_to_payment_frame()
+
     def generate_random_pin(self, i):
         range_start = 10**(i-1)
         range_end = (10**i)-1
@@ -80,20 +86,15 @@ class Payment(Base):
         self.wait_for_element_displayed(*self._buy_button_locator)
 
     def tap_buy_button(self):
-        self.marionette.switch_to_frame()
-        self.wait_for_element_not_displayed(*self._loading_throbber_locator)
-        self.switch_to_payment_frame()
+        self.wait_for_throbber_not_displayed()
         self.marionette.find_element(*self._buy_button_locator).tap()
         self.marionette.switch_to_frame()
         self.wait_for_element_not_present(*self._payment_frame_locator)
         self.marionette.switch_to_frame()
 
     def tap_cancel_button(self):
-        self.marionette.switch_to_frame()
-        self.wait_for_element_not_displayed(*self._loading_throbber_locator)
-        self.switch_to_payment_frame()
-        cancel_button = self.marionette.find_element(*self._cancel_button_locator)
-        cancel_button.tap()
+        self.wait_for_throbber_not_displayed()
+        self.marionette.find_element(*self._cancel_button_locator).tap()
         self.marionette.switch_to_frame()
         self.wait_for_element_not_present(*self._payment_frame_locator)
         self.marionette.switch_to_frame()
