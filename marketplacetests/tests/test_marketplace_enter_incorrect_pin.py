@@ -5,6 +5,7 @@
 from fxapom.fxapom import FxATestAccount
 
 from marketplacetests.payment.app import Payment
+from marketplacetests.firefox_accounts.app import FirefoxAccounts
 from marketplacetests.marketplace_gaia_test import MarketplaceGaiaTestCase
 from marketplacetests.marketplace.app import Marketplace
 
@@ -15,7 +16,8 @@ class TestMarketplaceEnterIncorrectPin(MarketplaceGaiaTestCase):
 
         APP_NAME = 'Test Zippy With Me'
         PIN = '1234'
-        acct = FxATestAccount(use_prod=False).create_account()
+        BAD_PIN = '5678'
+        acct = FxATestAccount(base_url=self.base_url).create_account()
 
         if self.apps.is_app_installed(APP_NAME):
             self.apps.uninstall(APP_NAME)
@@ -26,7 +28,8 @@ class TestMarketplaceEnterIncorrectPin(MarketplaceGaiaTestCase):
         marketplace.set_region('United States')
 
         details_page = marketplace.navigate_to_app(APP_NAME)
-        ff_accounts = details_page.tap_purchase_button(is_logged_in=False)
+        details_page.tap_install_button()
+        ff_accounts = FirefoxAccounts(self.marionette)
         ff_accounts.login(acct.email, acct.password)
 
         payment = Payment(self.marionette)
@@ -36,11 +39,10 @@ class TestMarketplaceEnterIncorrectPin(MarketplaceGaiaTestCase):
         marketplace.switch_to_marketplace_frame()
         marketplace.wait_for_notification_message_not_displayed()
 
-        details_page.tap_purchase_button()
+        details_page.tap_install_button()
 
         # Enter random wrong pin number
-        incorrect_pin = payment.generate_random_pin(4)
-        payment.enter_pin(incorrect_pin)
+        payment.enter_pin(BAD_PIN)
 
         # Verify error message
         self.assertEqual('Wrong PIN', payment.wrong_pin_message_text)

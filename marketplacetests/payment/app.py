@@ -2,8 +2,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from random import randint
-
 from gaiatest.apps.base import Base
 from marionette.by import By
 from marionette.wait import Wait
@@ -47,11 +45,6 @@ class Payment(Base):
         self.wait_for_element_not_displayed(*self._loading_throbber_locator)
         self.switch_to_payment_frame()
 
-    def generate_random_pin(self, i):
-        range_start = 10**(i-1)
-        range_end = (10**i)-1
-        return randint(range_start, range_end)
-
     @property
     def app_name(self):
         return self.marionette.find_element(*self._app_name_locator).text
@@ -83,6 +76,9 @@ class Payment(Base):
         self.tap_pin_continue()
 
     def enter_pin(self, pin):
+        self.switch_to_payment_frame()
+        # Workaround click because switch_to_payment_frame makes the keyboard disspear
+        self.marionette.find_element(*self._pin_container_locator).click()
         self.wait_for_element_displayed(*self._pin_container_locator)
         Wait(marionette=self.marionette).until(lambda m: 'Enter PIN' in self.pin_heading)
         self.marionette.find_element(*self._pin_container_locator).send_keys(pin)
