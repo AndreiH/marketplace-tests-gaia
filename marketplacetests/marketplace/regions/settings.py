@@ -8,9 +8,10 @@ from gaiatest.apps.base import Base
 
 class Settings(Base):
 
-    _email_account_field_locator = (By.ID, 'email')
+    _email_locator = (By.CSS_SELECTOR, '.email.account-field > p')
     _save_locator = (By.CSS_SELECTOR, 'footer > p > button')
-    _sign_in_button_locator = (By.CSS_SELECTOR, '.only-logged-out a:not(.register)')
+    _sign_in_button_on_my_apps_locator = (By.CSS_SELECTOR, '#account-settings a.button.persona:not(.register)')
+    _sign_in_button_locator = (By.CSS_SELECTOR, 'a.button.login')
     _sign_out_button_locator = (By.CSS_SELECTOR, 'a.button.logout')
     _back_button_locator = (By.ID, 'nav-back')
     _save_changes_button_locator = (By.XPATH, "//section[@id='account-settings']//button[text()='Save Changes']")
@@ -34,6 +35,11 @@ class Settings(Base):
         from marketplacetests.firefox_accounts.app import FirefoxAccounts
         return FirefoxAccounts(self.marionette)
 
+    def tap_sign_in_from_my_apps(self):
+        self.marionette.find_element(*self._sign_in_button_on_my_apps_locator).tap()
+        from marketplacetests.firefox_accounts.app import FirefoxAccounts
+        return FirefoxAccounts(self.marionette)
+
     def wait_for_sign_out_button(self):
         self.wait_for_element_displayed(*self._sign_out_button_locator)
 
@@ -46,7 +52,7 @@ class Settings(Base):
 
     @property
     def email(self):
-        return self.marionette.find_element(*self._email_account_field_locator).get_attribute('value')
+        return self.marionette.find_element(*self._email_locator).text
 
     def go_to_my_apps_page(self):
         self.marionette.find_element(*self._my_apps_tab_locator).tap()
@@ -55,7 +61,7 @@ class Settings(Base):
 
 class MyApps(Base):
 
-    _login_required_message_locator = (By.CSS_SELECTOR, '.only-logged-out .notice')
+    _login_required_message_locator = (By.CSS_SELECTOR, '#account-settings .main div p')
     _my_apps_list_locator = (By.CSS_SELECTOR, '.item.result')
     _settings_page_locator = (By.CSS_SELECTOR, '.tab-link[href="/settings"]')
 

@@ -5,9 +5,17 @@
 import os
 
 from gaiatest.gaia_test import GaiaTestCase
+from fxapom.fxapom import FxATestAccount
+from marionette.by import By
+
+from gaiatest.apps.homescreen.regions.confirm_install import ConfirmInstall
+from gaiatest.apps.homescreen.app import Homescreen
+from marketplacetests.marketplace.app import Marketplace
 
 
 class MarketplaceGaiaTestCase(GaiaTestCase):
+
+    _statusbar_downloads_icon_locator = (By.ID, 'statusbar-system-downloads')
 
     def setUp(self):
         GaiaTestCase.setUp(self)
@@ -17,6 +25,44 @@ class MarketplaceGaiaTestCase(GaiaTestCase):
 
         # Use this to override the Marketplace app version
         self.MARKETPLACE_DEV_NAME = 'Marketplace'
+
+        # This is used to tell FxA whether to create a dev or prod account
+        self.base_url = 'https://marketplace-dev.allizom.org'
+
+    def install_in_app_payments_test_app(self):
+
+        self.homescreen = Homescreen(self.marionette)
+
+        if not self.apps.is_app_installed(self.APP_NAME):
+
+            marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
+            marketplace.launch()
+            details_page = marketplace.navigate_to_app(self.APP_NAME)
+            details_page.tap_install_button()
+            self.wait_for_downloads_to_finish()
+
+            # Confirm the installation and wait for the app icon to be present
+            confirm_install = ConfirmInstall(self.marionette)
+            confirm_install.tap_confirm()
+
+        self.device.touch_home_button()
+        self.apps.switch_to_displayed_app()
+        self.homescreen.wait_for_app_icon_present(self.APP_NAME)
+
+    def create_account_and_change_its_region(self):
+        self.acct = FxATestAccount(base_url=self.base_url).create_account()
+        marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
+        marketplace.launch()
+        marketplace.login(self.acct.email, self.acct.password)
+        marketplace.set_region('United States')
+
+    @property
+    def email(self):
+        return self.acct.email
+
+    @property
+    def password(self):
+        return self.acct.password
 
     def install_certs(self):
         """ Install the marketplace-dev certs and set the pref required """
@@ -31,3 +77,7 @@ class MarketplaceGaiaTestCase(GaiaTestCase):
         self.data_layer.set_char_pref('dom.mozApps.signed_apps_installable_from',
                                       'https://marketplace-dev.allizom.org,https://marketplace.firefox.com')
         self.data_layer.set_bool_pref('dom.mozApps.use_reviewer_certs', True)
+
+    def wait_for_downloads_to_finish(self):
+        self.marionette.switch_to_frame()
+        self.wait_for_element_not_displayed(*self._statusbar_downloads_icon_locator)

@@ -15,7 +15,7 @@ class TestMarketplaceAddReview(MarketplaceGaiaTestCase):
 
     def test_add_review(self):
         APP_NAME = 'SoundCloud'
-        acct = FxATestAccount(use_prod=False).create_account()
+        acct = FxATestAccount(base_url=self.base_url).create_account()
 
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)
         marketplace.launch()
@@ -32,6 +32,6 @@ class TestMarketplaceAddReview(MarketplaceGaiaTestCase):
         marketplace.wait_for_notification_message_displayed()
 
         # Check if review was added correctly
-        self.assertEqual(marketplace.notification_message, "Your review was posted")
+        self.assertEqual(marketplace.notification_message, "Your review was successfully posted. Thanks!")
         self.assertEqual(details_page.first_review_rating, rating)
         self.assertEqual(details_page.first_review_body, body)

@@ -1,2 +1,2 @@
 gaiatest-v2.0
--e git+https://github.com/bobsilverberg/fxapom.git@remove_fxos#egg=fxapom
+-e git+https://github.com/bobsilverberg/fxapom.git@master#egg=fxapom

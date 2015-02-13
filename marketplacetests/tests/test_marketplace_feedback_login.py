@@ -12,7 +12,7 @@ class TestMarketplaceFeedback(MarketplaceGaiaTestCase):
     test_comment = 'This is a test comment.'
 
     def test_marketplace_feedback_user(self):
-        acct = FxATestAccount(use_prod=False).create_account()
+        acct = FxATestAccount(base_url=self.base_url).create_account()
 
         # launch marketplace dev and go to marketplace
         marketplace = Marketplace(self.marionette, self.MARKETPLACE_DEV_NAME)

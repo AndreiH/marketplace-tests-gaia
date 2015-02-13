@@ -17,7 +17,7 @@ class TestMarketplaceLogin(MarketplaceGaiaTestCase):
 
     def test_login_marketplace(self):
         # https://moztrap.mozilla.org/manage/case/4134/
-        acct = FxATestAccount(use_prod=False).create_account()
+        acct = FxATestAccount(base_url=self.base_url).create_account()
 
         settings = self.marketplace.tap_settings()
         ff_accounts = settings.tap_sign_in()

@@ -19,7 +19,7 @@ class TestMarketplaceLoginFromMyApps(MarketplaceGaiaTestCase):
         my_apps = settings.go_to_my_apps_page()
 
         self.assertEqual(my_apps.login_required_message, 'You must be signed in to view your apps.')
-        ff_accounts = settings.tap_sign_in()
+        ff_accounts = settings.tap_sign_in_from_my_apps()
 
         ff_accounts.login(username, password)
 

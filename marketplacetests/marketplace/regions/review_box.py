@@ -11,7 +11,7 @@ class AddReview(Base):
     Page for adding reviews.
     """
 
-    _add_review_input_field_locator = (By.ID, 'id_body')
+    _add_review_input_field_locator = (By.ID, 'review-body')
     _submit_review_button_locator = (By.CSS_SELECTOR, 'button[type="submit"]')
     _review_box_locator = (By.CSS_SELECTOR, '.add-review-form')
     _rating_locator = (By.CSS_SELECTOR, ".ratingwidget.stars-0 > label[data-stars='%s']")

@@ -2,8 +2,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-import re
-
 from marionette.by import By
 from gaiatest.apps.base import Base
 from gaiatest.apps.base import PageRegion
@@ -25,7 +23,6 @@ class SearchResults(Base):
         search_results = self.marionette.find_elements(*self._search_result_locator)
         return [Result(self.marionette, result) for result in search_results]
 
-
 class Result(PageRegion):
 
     _name_locator = (By.CSS_SELECTOR, '.info > h3')
@@ -46,7 +43,6 @@ class Result(PageRegion):
 
     def tap_install_button(self):
         self.root_element.find_element(*self._install_button_locator).tap()
-        self.marionette.switch_to_frame()
 
     def tap_app(self):
         app_name = self.root_element.find_element(*self._name_locator)
